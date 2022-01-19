@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { collection, addDoc, getDocs, deleteDoc, onSnapshot, Query } from "firebase/firestore";
+import { collection, doc, addDoc, getDocs, deleteDoc, onSnapshot, updateDoc } from "firebase/firestore";
 
 export const addTask = async data => {
   try{
@@ -29,5 +29,18 @@ export const deleteTask = id => {
     return true;
   } catch(e){
     console.error(e)
+  }
+}
+
+export const updateTask = (id, data) => {
+  try{
+    const taskRef = doc(db, 'tasks', id);
+    await updateDoc(taskRef, {
+      status: data,
+      modified: new Date()
+    })
+    return true;
+  } catch (e){
+    console.error(r)
   }
 }

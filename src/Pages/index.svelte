@@ -19,7 +19,19 @@
     status:"not_started"
   }
   */
-  let taskList = [];
+  let taskList = [{
+    id:"1",
+    title:"Prueba de card",
+    content:"Prueba de que funciona collapse",
+    status:"not_started"
+  },
+  {
+    id:"2",
+    title:"Prueba de card",
+    content:"Prueba de que funciona collapse",
+    status:"not_started"
+  }
+];
   let task = initialTask
 
   const HandleSubmit = async e => {
@@ -27,13 +39,13 @@
       ...task,
       created_date: new Date
     }
-    await addTask(bodyPost);
+    // await addTask(bodyPost);
     document.querySelector('form').reset();
   }
 
   $: console.log("TASK",taskList)
 
-  onMount(async ()=> getTasks((tasks)=> taskList = [...tasks] ));
+  // onMount(async ()=> getTasks((tasks)=> taskList = [...tasks] ));
 
 </script>
 

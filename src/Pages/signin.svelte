@@ -17,6 +17,9 @@
   };
 </script>
 
+<svelte:head>
+  <title>Sign in | Todo Svelte</title>
+</svelte:head>
 <Navbar />
 <main>
   <SignInForm

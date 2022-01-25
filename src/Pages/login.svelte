@@ -17,6 +17,9 @@
   };
 </script>
 
+<svelte:head>
+  <title>Login | Todo Svelte</title>
+</svelte:head>
 <Navbar />
 <main class="postion-relative">
   <LogInForm on:error="{() => settingToaster('Error in login')}" />

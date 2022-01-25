@@ -11,8 +11,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>404 | Todo Svelte</title>
+</svelte:head>
 <Navbar />
-
 <div>
   <h2>404 - Page not found</h2>
   <Link to="{`${page}`}">

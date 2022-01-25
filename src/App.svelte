@@ -7,10 +7,10 @@
 </script>
 
 <Router>
-	<Route path="/" component="{Index}" />
 	<Route path="/login" component="{Login}" />
 	<Route path="/signin" component="{Signin}" />
 	<Route component="{NotFound}" />
+	<Route path="/" component="{Index}" />
 </Router>
 
 <style>

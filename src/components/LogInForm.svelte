@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import { Link } from "svelte-routing";
   import {
     signInAnonymously,
@@ -7,6 +8,8 @@
     GoogleAuthProvider,
   } from "firebase/auth";
   import { auth } from "../firebase/firebase";
+
+  const dispatcher = createEventDispatcher();
 
   let formData = {
     email: "",
@@ -27,6 +30,7 @@
       saveUser(user);
       window.location.href = "/";
     } catch (e) {
+      dispatcher("error");
       console.error(e.message);
     }
   };

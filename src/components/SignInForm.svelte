@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import { createUserWithEmailAndPassword } from "firebase/auth";
   import { auth } from "../firebase/firebase";
   import { Link } from "svelte-routing";
@@ -7,6 +8,8 @@
     password: "",
     repeatedPassword: "",
   };
+
+  const dispatcher = createEventDispatcher();
 
   const handleRegister = async () => {
     try {
@@ -18,8 +21,11 @@
         );
         sessionStorage.setItem("currentUser", user);
         window.location.href = "/";
+      } else {
+        dispatcher("errorPass");
       }
     } catch (e) {
+      dispatcher("error");
       console.error(e.message);
     }
   };

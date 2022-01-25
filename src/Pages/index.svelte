@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import Navbar from "../components/Navbar.svelte";
   import Card from "../components/Card.svelte";
+  import Toaster from "../components/Toster.svelte";
   import {
     addTask,
     getTasks,
@@ -13,11 +14,24 @@
     content: "",
     status: "not_started",
   };
+  let toasterProps = {
+    msg: "",
+    bg: "",
+    show: false,
+  };
 
   let currentUser;
   let taskList = [];
   let task = initialTask;
   let finishedList = false;
+
+  const settingToaster = (msgIn, bgIn) => {
+    toasterProps = {
+      msg: msgIn,
+      bg: bgIn ? "success" : "danger",
+      show: true,
+    };
+  };
 
   const HandleSubmit = async () => {
     const bodyPost = {
@@ -25,8 +39,24 @@
       uid: currentUser,
       created_date: new Date(),
     };
-    await addTask(bodyPost);
-    document.querySelector("form").reset();
+    try {
+      await addTask(bodyPost);
+      document.querySelector("form").reset();
+      settingToaster("Task added correctly", true);
+    } catch (e) {
+      settingToaster("Error in submit");
+      console.error(e.message);
+    }
+  };
+
+  const HandleDelete = async () => {
+    try {
+      deleteCollection(currentUser);
+      settingToaster("Task list deleted correctly", true);
+    } catch (e) {
+      console.error(e);
+      settingToaster("Error on deleting task list");
+    }
   };
 
   onMount(async () => {
@@ -48,10 +78,6 @@
       finishedList = false;
     }
   }
-
-  const handleMessage = (event) => {
-    alert(event.detail.text);
-  };
 </script>
 
 <Navbar />
@@ -91,17 +117,18 @@
 
     <section class="col-12 col-md-7 col-lg-8 ps-4 mt-4">
       {#each taskList as data}
-        <Card {...data} on:message="{handleMessage}" />
+        <Card
+          {...data}
+          on:message="{() => settingToaster('Task deleted correctly', true)}"
+          on:error="{() => settingToaster('Error on deleting task')}"
+        />
       {:else}
         <p class="text-center text-white mt-5">No tasks listed</p>
       {/each}
 
       {#if finishedList}
         <div class="row">
-          <button
-            class="btn btn-primary col-12 mt-4"
-            on:click="{() => deleteCollection(currentUser)}"
-          >
+          <button class="btn btn-primary col-12 mt-4" on:click="{HandleDelete}">
             Delete list
           </button>
         </div>
@@ -109,6 +136,7 @@
     </section>
   </div>
 </main>
+<Toaster {...toasterProps} />
 
 <style>
   textarea {

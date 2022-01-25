@@ -8,20 +8,12 @@
 
   const onEdit = () => {
     const newStatus = status === "not_started" ? "done" : "not_started";
-    const response = updateTask(id, newStatus);
-    // todo hacer bind de props hacia index
+    updateTask(id, newStatus);
   };
 
   const onDelete = async () => {
     const response = deleteTask(id);
-
-    const message = response
-      ? "Task deleted correctly!"
-      : "Something went wrong";
-
-    svelteDispatch("message", {
-      text: message,
-    });
+    svelteDispatch(response ? "message" : "error");
   };
 </script>
 

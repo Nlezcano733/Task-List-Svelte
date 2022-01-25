@@ -3,12 +3,14 @@
 	import Index from "./Pages/index.svelte";
 	import Login from "./Pages/login.svelte";
 	import Signin from "./Pages/signin.svelte";
+	import NotFound from "./Pages/NotFound.svelte";
 </script>
 
 <Router>
 	<Route path="/" component="{Index}" />
 	<Route path="/login" component="{Login}" />
 	<Route path="/signin" component="{Signin}" />
+	<Route component="{NotFound}" />
 </Router>
 
 <style>

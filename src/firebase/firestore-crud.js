@@ -2,45 +2,57 @@ import { db } from './firebase';
 import { collection, doc, addDoc, getDocs, deleteDoc, onSnapshot, updateDoc } from "firebase/firestore";
 
 export const addTask = async data => {
-  try{
+  try {
     const response = await addDoc(collection(db, "tasks"), data);
     return response.id
-  } catch(e){
+  } catch (e) {
     console.error(e);
   }
 }
 
-export const getTasks = (callback) => {
+export const getTasks = (callback, user) => {
   try {
     onSnapshot(collection(db, 'tasks'), snap => {
       let docs = [];
-      snap.forEach(doc => docs.push({...doc.data(), id: doc.id}))
-      
+      snap.forEach(doc => docs.push({ ...doc.data(), id: doc.id }))
+
+      docs = docs.filter(d => d.uid === user);
       callback(docs)
     })
-  } catch(e){
+  } catch (e) {
     console.error(e)
   }
 }
 
 export const deleteTask = id => {
   try {
-    deleteDoc(collection(db, "tasks", id))
+    const ref = doc(db, 'tasks', id)
+    deleteDoc(ref)
     return true;
-  } catch(e){
+  } catch (e) {
     console.error(e)
   }
 }
 
-export const updateTask = (id, data) => {
-  try{
+export const deleteCollection = () => {
+  try {
+    getTasks((data) => {
+      data?.forEach(d => deleteTask(d?.id))
+    })
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export const updateTask = async (id, data) => {
+  try {
     const taskRef = doc(db, 'tasks', id);
     await updateDoc(taskRef, {
       status: data,
       modified: new Date()
     })
     return true;
-  } catch (e){
-    console.error(r)
+  } catch (e) {
+    console.error(e)
   }
 }

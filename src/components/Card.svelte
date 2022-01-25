@@ -1,50 +1,65 @@
 <script>
-  import {updateTask} from '../firebase/firestore-crud';
+  import { createEventDispatcher } from "svelte";
+  import { updateTask, deleteTask } from "../firebase/firestore-crud";
+
   export let id, title, content, status;
-  
+
+  const svelteDispatch = createEventDispatcher();
+
   const onEdit = () => {
-    const newStatus = status === "not_started"
-      ? "done" : "not_started"
-    const response = updateTask(id, newStatus)
+    const newStatus = status === "not_started" ? "done" : "not_started";
+    const response = updateTask(id, newStatus);
     // todo hacer bind de props hacia index
-  }
+  };
 
   const onDelete = async () => {
-    // implement on delete 
-  }
+    const response = deleteTask(id);
 
+    const message = response
+      ? "Task deleted correctly!"
+      : "Something went wrong";
+
+    svelteDispatch("message", {
+      text: message,
+    });
+  };
 </script>
 
-<div class="bg-secondary text-light card-container row">
-    <h1 class="card-title col-9">
-      {title}
-    </h1>
+<div
+  class="{`text-light card-container row ${
+    status === 'done' ? 'card-filter-done' : 'bg-secondary'
+  }`}"
+>
+  <h1
+    class="{`card-title col-9 ${
+      status === 'done' ? 'text-decoration-line-through' : ''
+    }`}"
+  >
+    {title}
+  </h1>
 
-    <div class="col-3 card-buttons">
-
-    <button 
-    type="button" data-bs-toggle="collapse" 
-      data-bs-target={"#card-detail-" + id}
-      aria-expanded="false" 
-      aria-controls={"card-detail-" + id}
+  <div class="col-3 card-buttons">
+    <button
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="{'#card-detail-' + id}"
+      aria-expanded="false"
+      aria-controls="{'card-detail-' + id}"
     >
-      <i class="fas fa-chevron-down" ></i>
+      <i class="fas fa-chevron-down"></i>
     </button>
 
-    <button on:click={onEdit}>
-      {#if status} 
-      ✅
-      {:else} 
-      ❌
+    <button on:click="{onEdit}">
+      {#if status === "not_started"}
+        ✅
+      {:else}
+        ❌
       {/if}
     </button>
 
-    <button on:click={onDelete}>
-      🗑️
-    </button>
-
+    <button on:click="{onDelete}"> 🗑️ </button>
   </div>
-  <div class="collapse col-12" id={"card-detail-" + id}>
+  <div class="collapse col-12" id="{'card-detail-' + id}">
     <div class="card card-body">
       {content}
     </div>
@@ -60,17 +75,23 @@
     margin-top: 1rem;
     border-radius: 0.5rem;
   }
-  h1{
+
+  .card-filter-done {
+    filter: grayscale(0.5);
+    background-color: #333;
+  }
+
+  h1 {
     font-size: 18px;
   }
 
-  .card-buttons{
+  .card-buttons {
     display: flex;
     justify-content: end;
   }
 
-  button{
-    margin-left: .5rem;
+  button {
+    margin-left: 0.5rem;
     width: 2.5rem;
     border-radius: 0.3rem;
     background-color: #d3d3d3;

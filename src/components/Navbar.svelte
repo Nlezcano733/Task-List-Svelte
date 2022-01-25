@@ -1,43 +1,43 @@
 <script>
-  export let projects = []
+  import { signOut } from "firebase/auth";
+  import { auth } from "../firebase/firebase";
+  let pathname = window.location.pathname;
+
+  const handleSignOut = () => {
+    try {
+      sessionStorage.removeItem("currentUser");
+      signOut(auth);
+      window.location.href = "/login";
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
 </script>
 
 <header class="navbar bg-secondary py-2">
   <nav class="container flex justify-content-between">
     <h1 class="navbar-brand text-white">To do - Svelte</h1>
-    <div>
-      <select class="form-select bg-secondary" aria-label="Default select example">
-        <option>Select a project</option>
-        {#each projects as project}
-          <option value={project} class="text-capitalize"> {project} </option>
-        {/each}
-      </select>
-      <i class="fas fa-sign-out-alt"></i>
-    </div>
-    </nav>
-  </header>
-  
+    {#if pathname === "/"}
+      <button on:click="{handleSignOut}">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    {/if}
+  </nav>
+</header>
+
 <style>
-  div{
-    display: flex;
-    align-items: center;
-    width: fit-content;
+  .navbar-brand {
+    font-family: "Patua One", Arial, Helvetica, sans-serif !important;
+    letter-spacing: -1px !important;
   }
 
-  select {
-    color: white;
+  button {
+    background-color: transparent;
     border: none;
     outline: none;
-    border-radius: 0px;
-    border-bottom: 1px solid #d1d1d1;
-  }
-  
-  select:focus {
-    box-shadow: none;
-    border-bottom: 1px solid #fafafa;
   }
 
-  i{
+  i {
     font-size: 20px;
     color: white;
     margin-left: 30px;

@@ -35,6 +35,8 @@
     if (dataUser) {
       currentUser = dataUser.user?.uid;
       getTasks((tasks) => (taskList = [...tasks]), currentUser);
+    } else {
+      window.location.href = "/login";
     }
   });
 
@@ -55,7 +57,7 @@
 <Navbar />
 <main class="container ">
   <div class="row">
-    <section class="col-4 mt-4">
+    <section class="col-12 col-md-5 col-lg-4 mt-4">
       <form class="text-light" on:submit|preventDefault="{HandleSubmit}">
         <div class="mb-3">
           <label for="taskTitle" class="form-label">Task name</label>
@@ -76,22 +78,33 @@
             placeholder="Enter a content"
             bind:value="{task.content}"></textarea>
         </div>
-
-        <button type="reset" class="btn btn-outline-primary">Reset</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <div class="ms-sm-1 row gap-2">
+          <button type="reset" class="col-12 col-sm-4 btn btn-outline-primary">
+            Reset
+          </button>
+          <button type="submit" class="col-12 col-sm-4 btn btn-primary">
+            Save
+          </button>
+        </div>
       </form>
     </section>
 
-    <section class="col-8 ps-4 mt-4">
+    <section class="col-12 col-md-7 col-lg-8 ps-4 mt-4">
       {#each taskList as data}
         <Card {...data} on:message="{handleMessage}" />
       {:else}
         <p class="text-center text-white mt-5">No tasks listed</p>
       {/each}
+
       {#if finishedList}
-        <button class="btn btn-primary" on:click="{deleteCollection}">
-          Delete list
-        </button>
+        <div class="row">
+          <button
+            class="btn btn-primary col-12 mt-4"
+            on:click="{() => deleteCollection(currentUser)}"
+          >
+            Delete list
+          </button>
+        </div>
       {/if}
     </section>
   </div>

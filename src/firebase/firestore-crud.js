@@ -34,11 +34,12 @@ export const deleteTask = id => {
   }
 }
 
-export const deleteCollection = () => {
+export const deleteCollection = (user) => {
   try {
     getTasks((data) => {
-      data?.forEach(d => deleteTask(d?.id))
-    })
+      data
+        ?.forEach(d => deleteTask(d?.id))
+    }, user)
   } catch (e) {
     console.error(e)
   }

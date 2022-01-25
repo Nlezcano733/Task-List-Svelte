@@ -37,6 +37,10 @@
     outline: none;
   }
 
+  button:active {
+    background-color: transparent;
+  }
+
   i {
     font-size: 20px;
     color: white;

@@ -43,6 +43,8 @@
       class="form-control"
       id="email"
       bind:value="{formData.email}"
+      pattern="{`^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z])$`}"
+      required="{true}"
     />
   </div>
   <div class="mb-3">
@@ -52,6 +54,8 @@
       class="form-control"
       id="password"
       bind:value="{formData.password}"
+      pattern="{'.{8,}'}"
+      required="{true}"
     />
   </div>
   <div class="mb-3">
@@ -61,6 +65,8 @@
       class="form-control"
       id="passwordRepeat"
       bind:value="{formData.repeatedPassword}"
+      pattern="{'.{8,}'}"
+      required="{true}"
     />
   </div>
   <div class="row gap-2 px-3">
